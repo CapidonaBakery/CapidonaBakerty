@@ -2615,50 +2615,67 @@ async function loadRemoteConfig() {
     /* =========================================================
        10. PEDIDOS, SHEETS Y WHATSAPP
        ========================================================= */
-    function buildOrderPayload(orderNumber = "") {
-      const lines = getCartLines();
-      const first = lines[0];
-      const payment = CONFIG.paymentMethods.find(method => method.id === state.checkout.paymentMethod);
-      state.checkout.customerName = el.customerName.value.trim();
-      state.checkout.zone = el.deliveryZone.value.trim();
-      state.checkout.notes = el.orderNotes.value.trim();
+   function buildOrderPayload(orderNumber = "") {
+  const lines = getCartLines();
+  const payment = CONFIG.paymentMethods.find(method => method.id === state.checkout.paymentMethod);
 
-      return {
-        orderNumber,
-        createdAt: new Date().toISOString(),
-        source: "github_pages",
-        businessName: CONFIG.business.name,
-        customerName: state.checkout.customerName,
-        productId: first?.product?.id || "",
-        productName: first?.product?.name || "",
-        quantity: getCartQuantity(),
-        unitPrice: first?.unitPrice || 0,
-        subtotal: getCartTotal(),
-        totalText: `${money(getCartTotal())} + envío`,
-        requestedDate: state.checkout.dateKey,
-        requestedDateLabel: state.checkout.dateLabel,
-        weekday: state.checkout.weekday,
-        slotId: state.checkout.slotId,
-        slotLabel: state.checkout.slotLabel,
-        slotStart: state.checkout.slotStart,
-        slotEnd: state.checkout.slotEnd,
-        mode: state.checkout.mode,
-        zone: state.checkout.mode === "delivery" ? state.checkout.zone : "",
-        paymentMethod: state.checkout.paymentMethod,
-        paymentLabel: payment?.label || "",
-        notes: state.checkout.notes,
-        orderStatus: "recibido",
-        paymentStatus: "pendiente",
-        rawCartItems: lines.map(line => ({
-          productId: line.product.id,
-          productName: line.product.name,
-          quantity: line.quantity,
-          unitPrice: line.unitPrice,
-          subtotal: line.subtotal
-        })),
-        appVersion: CONFIG.appVersion
-      };
-    }
+  state.checkout.customerName = el.customerName.value.trim();
+  state.checkout.zone = el.deliveryZone.value.trim();
+  state.checkout.notes = el.orderNotes.value.trim();
+
+  const productIds = lines
+    .map(line => line.product.id)
+    .join(" + ");
+
+  const productNames = lines
+    .map(line => `${line.product.name} x${line.quantity}`)
+    .join(" + ");
+
+  const unitPriceValue = lines.length === 1
+    ? Number(lines[0]?.unitPrice || 0)
+    : "Mixto";
+
+  return {
+    orderNumber,
+    createdAt: new Date().toISOString(),
+    source: "github_pages",
+    businessName: CONFIG.business.name,
+    customerName: state.checkout.customerName,
+
+    productId: productIds,
+    productName: productNames,
+
+    quantity: getCartQuantity(),
+    unitPrice: unitPriceValue,
+    subtotal: getCartTotal(),
+    totalText: `${money(getCartTotal())} + envío`,
+
+    requestedDate: state.checkout.dateKey,
+    requestedDateLabel: state.checkout.dateLabel,
+    weekday: state.checkout.weekday,
+    slotId: state.checkout.slotId,
+    slotLabel: state.checkout.slotLabel,
+    slotStart: state.checkout.slotStart,
+    slotEnd: state.checkout.slotEnd,
+    mode: state.checkout.mode,
+    zone: state.checkout.mode === "delivery" ? state.checkout.zone : "",
+    paymentMethod: state.checkout.paymentMethod,
+    paymentLabel: payment?.label || "",
+    notes: state.checkout.notes,
+    orderStatus: "recibido",
+    paymentStatus: "pendiente",
+
+    rawCartItems: lines.map(line => ({
+      productId: line.product.id,
+      productName: line.product.name,
+      quantity: line.quantity,
+      unitPrice: line.unitPrice,
+      subtotal: line.subtotal
+    })),
+
+    appVersion: CONFIG.appVersion
+  };
+}
 
     function buildWhatsAppMessage(orderNumber = "") {
       const paymentMethod = state.checkout.paymentMethod;
