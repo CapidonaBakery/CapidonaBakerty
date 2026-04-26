@@ -2756,28 +2756,33 @@ async function loadRemoteConfig() {
        12. INICIALIZACIÓN
        ========================================================= */
     async function init() {
+  // 1. Primero intentar cargar la última configuración guardada desde Sheets.
   const cachedConfig = loadRemoteConfigCache();
 
   if (cachedConfig) {
     normalizeRemoteConfig(cachedConfig);
-    console.log("CAPIDONA: configuración previa cargada desde caché.");
+    console.log("CAPIDONA: configuración previa cargada desde caché antes de renderizar.");
   }
 
+  // 2. Renderizar usando caché si existe. Si no existe, usa el CONFIG local.
   renderAll();
 
+  // 3. Actualizar desde Sheets en segundo plano.
   if (CONFIG.integrations.sheetsEnabled && CONFIG.integrations.configEndpoint) {
-    const remoteConfig = await loadRemoteConfig();
-
-    if (remoteConfig) {
-      renderAll();
-      console.log("CAPIDONA: configuración actualizada desde Sheets.");
-    }
+    loadRemoteConfig()
+      .then((remoteConfig) => {
+        if (remoteConfig) {
+          renderAll();
+          console.log("CAPIDONA: configuración actualizada desde Sheets.");
+        }
+      })
+      .catch((error) => {
+        console.warn("CAPIDONA: no se pudo actualizar desde Sheets.", error);
+      });
   }
 }
 
 init();
-
-    init();
   </script>
 </body>
 </html>
