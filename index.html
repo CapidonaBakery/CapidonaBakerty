@@ -2392,24 +2392,35 @@ async function loadRemoteConfig() {
       });
     }
 
-    function renderFinalProductSummary() {
-      const lines = getCartLines();
-      const first = lines[0];
-      if (!first) {
-        el.finalProductSummary.innerHTML = "";
-        return;
-      }
-      const modeLabel = state.checkout.mode === "delivery" ? "Entrega" : state.checkout.mode === "pickup" ? "Retiro" : "Modalidad pendiente";
-      el.finalProductSummary.innerHTML = `
-        ${imageHtml(first.product.coverImage, first.product.shortName)}
-        <div>
-          <strong>${first.product.shortName}</strong>
-          <span>${pluralizeBoxes(first.quantity)} · ${money(first.subtotal)} + envío</span>
-          <span>${state.checkout.dateLabel || "Fecha pendiente"}</span>
-          <span>${state.checkout.slotLabel || "Horario pendiente"} · ${modeLabel}</span>
-        </div>
-      `;
-    }
+   function renderFinalProductSummary() {
+  const lines = getCartLines();
+
+  if (!lines.length) {
+    el.finalProductSummary.innerHTML = "";
+    return;
+  }
+
+  const modeLabel = state.checkout.mode === "delivery"
+    ? "Entrega"
+    : state.checkout.mode === "pickup"
+      ? "Retiro"
+      : "Modalidad pendiente";
+
+  const productList = lines.map(line => `
+    <span>${line.product.shortName} x${line.quantity} · ${money(line.subtotal)}</span>
+  `).join("");
+
+  el.finalProductSummary.innerHTML = `
+    ${imageHtml(lines[0].product.coverImage, lines[0].product.shortName)}
+    <div>
+      <strong>Productos seleccionados</strong>
+      ${productList}
+      <span>Total: ${money(getCartTotal())} + envío</span>
+      <span>${state.checkout.dateLabel || "Fecha pendiente"}</span>
+      <span>${state.checkout.slotLabel || "Horario pendiente"} · ${modeLabel}</span>
+    </div>
+  `;
+}
 
     function renderCheckoutSummary() {
       const payment = CONFIG.paymentMethods.find(method => method.id === state.checkout.paymentMethod);
