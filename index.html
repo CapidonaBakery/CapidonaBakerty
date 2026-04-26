@@ -1822,17 +1822,33 @@
     /* =========================================================
        5. CONFIGURACIÓN REMOTA / SHEETS
        ========================================================= */
-    async function loadRemoteConfig() {
-      if (!CONFIG.integrations.sheetsEnabled || !CONFIG.integrations.configEndpoint) return;
-      try {
-        const response = await fetch(CONFIG.integrations.configEndpoint, { method: "GET", cache: "no-store" });
-        if (!response.ok) throw new Error("No se pudo leer la configuración remota.");
-        const remote = await response.json();
-        normalizeRemoteConfig(remote);
-      } catch (error) {
-        console.warn("CAPIDONA: usando configuración local por defecto.", error);
-      }
+   async function loadRemoteConfig() {
+  if (!CONFIG.integrations.sheetsEnabled || !CONFIG.integrations.configEndpoint) return;
+
+  try {
+    const url = `${CONFIG.integrations.configEndpoint}?action=config&t=${Date.now()}`;
+
+    const response = await fetch(url, {
+      method: "GET",
+      cache: "no-store",
+      redirect: "follow"
+    });
+
+    if (!response.ok) {
+      throw new Error("No se pudo leer la configuración remota.");
     }
+
+    const remote = await response.json();
+    const configData = remote.data || remote;
+
+    normalizeRemoteConfig(configData);
+
+    console.log("CAPIDONA: configuración remota cargada correctamente.");
+
+  } catch (error) {
+    console.warn("CAPIDONA: usando configuración local por defecto.", error);
+  }
+}
 
     function normalizeRemoteConfig(remote) {
       if (!remote || typeof remote !== "object") return;
@@ -2715,9 +2731,23 @@
        12. INICIALIZACIÓN
        ========================================================= */
     async function init() {
+  // 1. Renderiza inmediatamente con la configuración local.
+  renderAll();
+
+  // 2. Luego intenta cargar la configuración remota desde Sheets.
+  if (CONFIG.integrations.sheetsEnabled && CONFIG.integrations.configEndpoint) {
+    try {
       await loadRemoteConfig();
+
+      // 3. Si Sheets responde, vuelve a renderizar con datos actualizados.
       renderAll();
+
+      console.log("CAPIDONA: configuración remota aplicada correctamente.");
+    } catch (error) {
+      console.warn("CAPIDONA: no se pudo aplicar configuración remota.", error);
     }
+  }
+}
 
     init();
   </script>
