@@ -3276,29 +3276,59 @@ if (copyEmailBtn && email) {
     /* =========================================================
        12. INICIALIZACIÓN
        ========================================================= */
-   async function init() {
+   function hasValidProducts(configData) {
+  if (!configData || typeof configData !== "object") return false;
+
+  const products = Array.isArray(configData.products)
+    ? configData.products
+    : Array.isArray(configData.catalog)
+      ? configData.catalog
+      : [];
+
+  return products.some(product => {
+    return product &&
+      product.id &&
+      product.status !== "hidden" &&
+      (product.status === "active" || product.status === "coming_soon");
+  });
+}
+    
+    async function init() {
+  let rendered = false;
+
   const cachedConfig = loadRemoteConfigCache();
 
-  if (cachedConfig) {
+  if (hasValidProducts(cachedConfig)) {
     normalizeRemoteConfig(cachedConfig);
-    console.log("CAPIDONA: cargando desde último caché disponible.");
+    renderAll();
+    rendered = true;
+    console.log("CAPIDONA: cargando desde último caché válido.");
   } else {
-    console.warn("CAPIDONA: no hay caché previo, usando CONFIG local inicial.");
+    console.warn("CAPIDONA: no hay caché válido con productos.");
   }
-
-  renderAll();
 
   if (CONFIG.integrations.sheetsEnabled && CONFIG.integrations.configEndpoint) {
     try {
       const remoteConfig = await loadRemoteConfig();
 
-      if (remoteConfig) {
-        console.log("CAPIDONA: configuración actualizada desde Sheets y guardada en caché.");
+      if (hasValidProducts(remoteConfig)) {
+        normalizeRemoteConfig(remoteConfig);
+        saveRemoteConfigCache(remoteConfig);
         renderAll();
+        rendered = true;
+        console.log("CAPIDONA: configuración cargada desde Sheets y guardada como nuevo caché.");
+      } else {
+        console.warn("CAPIDONA: Sheets respondió, pero no trajo productos válidos.", remoteConfig);
       }
+
     } catch (error) {
-      console.warn("CAPIDONA: no se pudo actualizar desde Sheets. Se conserva caché/local.", error);
+      console.warn("CAPIDONA: no se pudo actualizar desde Sheets.", error);
     }
+  }
+
+  if (!rendered) {
+    console.warn("CAPIDONA: usando CONFIG local como respaldo final.");
+    renderAll();
   }
 }
 
