@@ -2103,7 +2103,7 @@
     /* =========================================================
        5. CONFIGURACIÓN REMOTA / SHEETS
        ========================================================= */
-const CONFIG_CACHE_KEY = "CAPIDONA_LAST_REMOTE_CONFIG_V5";
+const CONFIG_CACHE_KEY = "CAPIDONA_LAST_REMOTE_CONFIG_V7";
     function saveRemoteConfigCache(configData) {
   try {
     localStorage.setItem(CONFIG_CACHE_KEY, JSON.stringify(configData));
@@ -3274,9 +3274,10 @@ if (copyEmailBtn && email) {
     });
 
     /* =========================================================
-       12. INICIALIZACIÓN
-       ========================================================= */
-   function hasValidProducts(configData) {
+   12. INICIALIZACIÓN
+   ========================================================= */
+
+function hasValidProducts(configData) {
   if (!configData || typeof configData !== "object") return false;
 
   const products = Array.isArray(configData.products)
@@ -3292,8 +3293,8 @@ if (copyEmailBtn && email) {
       (product.status === "active" || product.status === "coming_soon");
   });
 }
-    
-    async function init() {
+
+async function init() {
   let rendered = false;
 
   const cachedConfig = loadRemoteConfigCache();
@@ -3336,3 +3337,8 @@ init();
   </script>
 </body>
 </html>
+
+
+
+
+
