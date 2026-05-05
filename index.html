@@ -3258,8 +3258,10 @@ async function loadRemoteConfig() {
     /* =========================================================
        12. INICIALIZACIÓN
        ========================================================= */
-    async function init() {
+   async function init() {
   let loadedRemote = false;
+
+  showToast("Cargando información actualizada...", "info");
 
   if (CONFIG.integrations.sheetsEnabled && CONFIG.integrations.configEndpoint) {
     const remoteConfig = await loadRemoteConfig();
