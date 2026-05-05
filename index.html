@@ -1741,8 +1741,8 @@
 
       integrations: {
         sheetsEnabled: true,
-        configEndpoint: "https://script.google.com/macros/s/AKfycbyDZ4RhAq3_mjXAPu-zsGAvP845UDKfepZ7lBVW1cZ9LxCKtB9KdYS4oJPbOUeo_mRz/exec", // Pegar aquí el endpoint GET de Apps Script para configuración.
-        ordersEndpoint: "https://script.google.com/macros/s/AKfycbyDZ4RhAq3_mjXAPu-zsGAvP845UDKfepZ7lBVW1cZ9LxCKtB9KdYS4oJPbOUeo_mRz/exec", // Pegar aquí el endpoint POST de Apps Script para pedidos.
+        configEndpoint: "https://script.google.com/macros/s/AKfycbwosmzeAo8uSRx-nDgex4TkBZjfy_6tj9awiipjMtLu1fP-3zhM7OgIB7JEIptvuW5sOQ/exec", // Pegar aquí el endpoint GET de Apps Script para configuración.
+        ordersEndpoint: "https://script.google.com/macros/s/AKfycbwosmzeAo8uSRx-nDgex4TkBZjfy_6tj9awiipjMtLu1fP-3zhM7OgIB7JEIptvuW5sOQ/exec", // Pegar aquí el endpoint POST de Apps Script para pedidos.
         mode: "production"
       },
 
@@ -1899,18 +1899,6 @@
           order: 4
         }
       ],
-
-      pageContent: {
-        aboutTitle: "Quiénes somos",
-        aboutText: "CAPIDONA es una repostería artesanal digital en Manta. Creamos pedidos dulces bajo pedido con una experiencia sencilla, cuidada y amigable.",
-        aboutImage: "",
-        contactTitle: "Contacto",
-        contactText: "Escríbenos por WhatsApp para coordinar tu pedido, entrega o retiro.",
-        contactWhatsapp: "593985711629",
-        contactInstagram: "",
-        contactAddress: "Manta, Ecuador",
-        contactHours: "Pedidos según disponibilidad de fechas y franjas en la web."
-      }
     };
 
     /* =========================================================
@@ -2140,33 +2128,37 @@ async function loadRemoteConfig() {
   }
 }
 
-    function normalizePageContentRows(rows) {
-      if (!Array.isArray(rows)) return {};
+   function normalizePageContentRows(rows) {
+  if (!Array.isArray(rows)) return {};
 
-      return rows.reduce((acc, item) => {
-        if (!item || item.active === false || String(item.activo).toUpperCase() === "FALSE") return acc;
+  return rows.reduce((acc, item) => {
+    if (!item || item.active === false || String(item.activo).toUpperCase() === "FALSE") return acc;
 
-        const key = String(item.clave || item.key || "").trim();
-        const value = String(item.valor ?? item.value ?? "").trim();
+    const key = String(item.clave || item.key || "").trim();
+    const value = String(item.valor ?? item.value ?? "").trim();
 
-        if (!key) return acc;
+    if (!key) return acc;
 
-        const map = {
-          sobre_titulo: "aboutTitle",
-          sobre_texto: "aboutText",
-          sobre_imagen: "aboutImage",
-          contacto_titulo: "contactTitle",
-          contacto_texto: "contactText",
-          contacto_whatsapp: "contactWhatsapp",
-          contacto_instagram: "contactInstagram",
-          contacto_direccion: "contactAddress",
-          contacto_horarios: "contactHours"
-        };
+    const map = {
+      logo_imagen: "logoImagen",
 
-        if (map[key]) acc[map[key]] = value;
-        return acc;
-      }, {});
-    }
+      sobre_titulo: "sobreTitulo",
+      sobre_texto: "sobreTexto",
+      sobre_imagen: "sobreImagen",
+
+      contacto_titulo: "contactoTitulo",
+      contacto_texto: "contactoTexto",
+      contacto_imagen: "contactoImagen",
+      contacto_whatsapp: "contactoWhatsapp",
+      contacto_whatsapp_link: "contactoWhatsappLink",
+      contacto_correo: "contactoCorreo",
+      contacto_instagram: "contactoInstagram"
+    };
+
+    if (map[key]) acc[map[key]] = value;
+    return acc;
+  }, {});
+}
 
     function normalizeRemoteConfig(remote) {
       if (!remote || typeof remote !== "object") return;
@@ -2779,38 +2771,57 @@ async function loadRemoteConfig() {
       });
     }
 
-    function renderPageContent() {
-      const page = CONFIG.pageContent || {};
-      const aboutImage = page.aboutImage ? `
-        <div class="info-image">${imageHtml(page.aboutImage, page.aboutTitle || "Quiénes somos")}</div>
-      ` : "";
+  function renderPageContent() {
+  const page = CONFIG.pageContent || {};
 
-      el.aboutContent.innerHTML = `
-        <h2>${page.aboutTitle || "Quiénes somos"}</h2>
-        ${aboutImage}
-        <p>${page.aboutText || "Información de CAPIDONA pendiente de configurar."}</p>
-      `;
+  const sobreImage = page.sobreImagen ? `
+    <div class="info-image">
+      ${imageHtml(page.sobreImagen, page.sobreTitulo || "Quiénes somos")}
+    </div>
+  ` : "";
 
-      const contactItems = [
-        ["WhatsApp", page.contactWhatsapp || CONFIG.contact.whatsappNumber || ""],
-        ["Instagram", page.contactInstagram || ""],
-        ["Zona de atención", page.contactAddress || CONFIG.business.city || ""],
-        ["Horarios", page.contactHours || ""]
-      ].filter(([, value]) => value);
+  el.aboutContent.innerHTML = `
+    <h2>${page.sobreTitulo || "Quiénes somos"}</h2>
+    ${sobreImage}
+    <p>${page.sobreTexto || "Información de CAPIDONA pendiente de configurar."}</p>
+  `;
 
-      el.contactContent.innerHTML = `
-        <h2>${page.contactTitle || "Contacto"}</h2>
-        <p>${page.contactText || "Información de contacto pendiente de configurar."}</p>
-        <div class="contact-list">
-          ${contactItems.map(([label, value]) => `
-            <div class="contact-item">
-              <strong>${label}</strong>
-              <span>${value}</span>
-            </div>
-          `).join("")}
+  const contactoImage = page.contactoImagen ? `
+    <div class="info-image">
+      ${imageHtml(page.contactoImagen, page.contactoTitulo || "Contacto")}
+    </div>
+  ` : "";
+
+  const whatsappNumber = page.contactoWhatsapp || CONFIG.contact.whatsappNumber || "";
+  const whatsappLink = page.contactoWhatsappLink || (whatsappNumber ? `https://wa.me/${whatsappNumber}` : "");
+
+  const contactItems = [
+    ["WhatsApp", whatsappNumber],
+    ["Correo electrónico", page.contactoCorreo || ""],
+    ["Instagram", page.contactoInstagram || ""]
+  ].filter(([, value]) => value);
+
+  el.contactContent.innerHTML = `
+    <h2>${page.contactoTitulo || "Contacto"}</h2>
+    ${contactoImage}
+    <p>${page.contactoTexto || "Información de contacto pendiente de configurar."}</p>
+
+    <div class="contact-list">
+      ${contactItems.map(([label, value]) => `
+        <div class="contact-item">
+          <strong>${label}</strong>
+          <span>${value}</span>
         </div>
-      `;
-    }
+      `).join("")}
+
+      ${whatsappLink ? `
+        <a class="primary-wide info-link" href="${whatsappLink}" target="_blank" rel="noopener">
+          Escribir por WhatsApp
+        </a>
+      ` : ""}
+    </div>
+  `;
+}
 
     function setActivePageTab(pageName = "products") {
       $$("[data-page-tab]").forEach(btn => {
