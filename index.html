@@ -2859,35 +2859,53 @@ async function loadRemoteConfig() {
     </div>
   ` : "";
 
-  const whatsappNumber = page.contactoWhatsapp || CONFIG.contact.whatsappNumber || "";
-  const whatsappLink = page.contactoWhatsappLink || (whatsappNumber ? `https://wa.me/${whatsappNumber}` : "");
+const whatsappNumber = page.contactoWhatsapp || CONFIG.contact.whatsappNumber || "";
+const whatsappLink = page.contactoWhatsappLink || (whatsappNumber ? `https://wa.me/${whatsappNumber}` : "");
+const instagramLink = page.contactoInstagram || "";
+const email = page.contactoCorreo || "";
 
-  const contactItems = [
-    ["WhatsApp", whatsappNumber],
-    ["Correo electrónico", page.contactoCorreo || ""],
-    ["Instagram", page.contactoInstagram || ""]
-  ].filter(([, value]) => value);
+el.contactContent.innerHTML = `
+  <h2>${page.contactoTitulo || "Contacto"}</h2>
+  ${contactoImage}
+  <p>${page.contactoTexto || "Información de contacto pendiente de configurar."}</p>
 
-  el.contactContent.innerHTML = `
-    <h2>${page.contactoTitulo || "Contacto"}</h2>
-    ${contactoImage}
-    <p>${page.contactoTexto || "Información de contacto pendiente de configurar."}</p>
+  <div class="contact-list">
+    ${whatsappLink ? `
+      <a class="primary-wide info-link" href="${whatsappLink}" target="_blank" rel="noopener">
+        Escribir por WhatsApp
+      </a>
+    ` : ""}
 
-    <div class="contact-list">
-      ${contactItems.map(([label, value]) => `
-        <div class="contact-item">
-          <strong>${label}</strong>
-          <span>${value}</span>
-        </div>
-      `).join("")}
+    ${instagramLink ? `
+      <a class="primary-wide info-link" href="${instagramLink}" target="_blank" rel="noopener">
+        Ver Instagram
+      </a>
+    ` : ""}
 
-      ${whatsappLink ? `
-        <a class="primary-wide info-link" href="${whatsappLink}" target="_blank" rel="noopener">
-          Escribir por WhatsApp
-        </a>
-      ` : ""}
-    </div>
-  `;
+    ${email ? `
+      <div class="contact-item">
+        <strong>Correo electrónico</strong>
+        <span id="contactEmailText">${email}</span>
+        <button class="copy-btn" id="copyContactEmailBtn" type="button">
+          Copiar correo
+        </button>
+      </div>
+    ` : ""}
+  </div>
+`;
+
+const copyEmailBtn = $("#copyContactEmailBtn");
+
+if (copyEmailBtn && email) {
+  copyEmailBtn.addEventListener("click", async () => {
+    try {
+      await navigator.clipboard.writeText(email);
+      showToast("Correo copiado.", "success");
+    } catch (error) {
+      console.error("No se pudo copiar el correo.", error);
+      showToast("No se pudo copiar el correo.", "error");
+    }
+  });
 }
 
     function setActivePageTab(pageName = "products") {
