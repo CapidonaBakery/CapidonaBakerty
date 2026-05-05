@@ -145,9 +145,9 @@
 
     .main-body {
       height: calc(100dvh - var(--header-h) - var(--cart-h) - env(safe-area-inset-bottom, 0px));
-      padding: 0 0 2px;
+      padding: 8px 0 10px;
       display: flex;
-     align-items: flex-end;
+      align-items: center;
       overflow: hidden;
     }
 
@@ -1167,9 +1167,9 @@
        AJUSTE QUIRÚRGICO DE PRESENTACIÓN SUPERIOR
        ========================= */
     :root {
-  --header-h: 180px;
-  --cart-h: 80px;
-}
+      --header-h: 148px;
+      --cart-h: 80px;
+    }
 
     .topbar {
       height: var(--header-h);
@@ -1178,23 +1178,23 @@
     }
 
     .brand-showcase {
-  width: 100%;
-  display: flex;
-  flex-direction: column;
-  align-items: stretch;
-}
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+    }
 
     .brand-row {
-  width: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: flex-start;
-  gap: 14px;
-}
-  
-   .brand-logo {
-  width: 126px;
-  height: 126px;
+      width: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: flex-start;
+      gap: 18px;
+    }
+
+    .brand-logo {
+      width: 92px;
+      height: 92px;
       border: 0;
       background: transparent;
       box-shadow: none;
@@ -1208,41 +1208,39 @@
       object-fit: contain;
     }
 
-   .slogan-pill {
-  width: auto;
-  max-width: 210px;
-  min-height: 52px;
-  padding: 9px 13px;
+    .slogan-pill {
+      width: auto;
+      max-width: 190px;
+      min-height: 46px;
+      padding: 9px 14px;
       display: flex;
       align-items: center;
       justify-content: center;
       align-self: center;
       text-align: center;
-      font-size: .86rem;
+      font-size: .88rem;
       line-height: 1.15;
     }
 
     .brand-name {
-  margin: 0 auto 8px;
-  font-size: 2rem;
-  line-height: 1;
-  letter-spacing: .045em;
-  text-align: center;
-  width: 100%;
-}
+      margin: -6px 0 0 3px;
+      font-size: 1.62rem;
+      line-height: .98;
+      letter-spacing: .045em;
+    }
 
     .brand-guide {
-  margin: 8px 0 0 3px;
-  padding: 0;
-  border: 0;
-  border-radius: 0;
-  background: transparent;
-  box-shadow: none;
-  color: var(--muted);
-  font-size: .96rem;
-  line-height: 1.25;
-  font-weight: 800;
-}
+      margin: 6px 0 0 3px;
+      padding: 0;
+      border: 0;
+      border-radius: 0;
+      background: transparent;
+      box-shadow: none;
+      color: var(--muted);
+      font-size: .88rem;
+      line-height: 1.25;
+      font-weight: 750;
+    }
 
     .cart-bar {
       border-radius: 22px;
@@ -1292,6 +1290,217 @@
       height: 84px;
     }
 
+
+    /* =========================
+       AJUSTE SECCIONES SUPERIORES + CARDS COMPACTAS
+       ========================= */
+    :root {
+      --header-h: 236px;
+    }
+
+    .section-tabs {
+      width: 100%;
+      display: flex;
+      gap: 8px;
+      margin: 8px 0 0;
+      padding: 4px;
+      border-radius: 999px;
+      background: rgba(255,255,255,.64);
+      border: 1px solid rgba(255,255,255,.86);
+      box-shadow: var(--shadow-soft);
+    }
+
+    .section-tab {
+      flex: 1 1 0;
+      min-height: 38px;
+      padding: 0 8px;
+      border-radius: 999px;
+      color: var(--brown-strong);
+      font-size: .75rem;
+      line-height: 1.1;
+      font-weight: 900;
+      text-align: center;
+      cursor: pointer;
+      transition: background var(--transition), color var(--transition), transform var(--transition), opacity var(--transition);
+    }
+
+    .section-tab:active {
+      transform: scale(.98);
+    }
+
+    .section-tab.active {
+      background: linear-gradient(180deg, #efb0b9 0%, var(--pink-strong) 100%);
+      color: #fff;
+      box-shadow: 0 8px 18px rgba(201,127,139,.20);
+    }
+
+    .product-card {
+      min-width: 174px;
+      width: 174px;
+      border-radius: 20px;
+    }
+
+    .catalog-rail {
+      gap: 10px;
+      padding: 0 16px 4px;
+    }
+
+    .product-info {
+      padding: 8px 10px 6px;
+    }
+
+    .product-name {
+      font-size: .88rem;
+      line-height: 1.12;
+    }
+
+    .product-controls,
+    .product-foot {
+      padding: 0 10px 10px;
+    }
+
+    .stepper {
+      min-height: 48px;
+      border-radius: 14px;
+    }
+
+    .stepper-btn {
+      width: 40px;
+      height: 40px;
+      border-radius: 12px;
+      font-size: 1.15rem;
+    }
+
+    .stepper-value {
+      min-width: 32px;
+      font-size: .92rem;
+    }
+
+    .soon-pill,
+    .teaser-pill {
+      min-height: 48px;
+      font-size: .68rem;
+    }
+
+    .status-badge {
+      top: 8px;
+      right: 8px;
+      padding: 6px 8px;
+      font-size: .58rem;
+    }
+
+    .info-screen {
+      z-index: 24;
+      background:
+        radial-gradient(circle at top left, rgba(217,154,163,.16), transparent 28%),
+        linear-gradient(180deg, #fcf8f4 0%, var(--bg) 100%);
+      transform: translateX(100%);
+      opacity: 0;
+      pointer-events: none;
+      display: flex;
+      flex-direction: column;
+      padding: 16px;
+    }
+
+    .info-screen.active {
+      transform: translateX(0);
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    .info-top {
+      padding-top: calc(2px + env(safe-area-inset-top, 0px));
+      margin-bottom: 12px;
+      flex: 0 0 auto;
+    }
+
+    .info-back-btn {
+      width: 100%;
+      min-height: 52px;
+      border-radius: 16px;
+      background: rgba(255,255,255,.78);
+      border: 1px solid rgba(255,255,255,.88);
+      box-shadow: var(--shadow-soft);
+      color: var(--brown-strong);
+      font-weight: 900;
+      cursor: pointer;
+    }
+
+    .info-content {
+      flex: 1 1 auto;
+      min-height: 0;
+      overflow-y: auto;
+      padding: 18px;
+      border-radius: 28px;
+      background: rgba(255,255,255,.78);
+      border: 1px solid rgba(255,255,255,.86);
+      box-shadow: var(--shadow-card);
+    }
+
+    .info-content h2 {
+      margin: 0 0 10px;
+      color: var(--brown-strong);
+      font-size: 1.36rem;
+      line-height: 1.1;
+      font-weight: 900;
+    }
+
+    .info-content p {
+      margin: 0 0 12px;
+      color: var(--muted);
+      font-size: .96rem;
+      line-height: 1.48;
+      font-weight: 650;
+    }
+
+    .info-image {
+      width: 100%;
+      margin: 12px 0 14px;
+      overflow: hidden;
+      border-radius: 22px;
+      background: var(--surface-2);
+    }
+
+    .info-image img {
+      width: 100%;
+      height: auto;
+      object-fit: cover;
+    }
+
+    .contact-list {
+      display: grid;
+      gap: 10px;
+      margin-top: 14px;
+    }
+
+    .contact-item {
+      padding: 12px 14px;
+      border-radius: 18px;
+      border: 1px solid var(--line);
+      background: #fff;
+    }
+
+    .contact-item strong {
+      display: block;
+      margin-bottom: 4px;
+      color: var(--brown-strong);
+      font-size: .86rem;
+      font-weight: 900;
+    }
+
+    .contact-item span {
+      display: block;
+      color: var(--muted);
+      font-size: .9rem;
+      line-height: 1.35;
+      overflow-wrap: anywhere;
+    }
+
+    @media (min-width: 440px) {
+      .product-card { min-width: 188px; width: 188px; }
+      .section-tab { font-size: .8rem; }
+    }
+
   </style>
 </head>
 <body>
@@ -1299,21 +1508,27 @@
     <div class="toast" id="toast" role="status" aria-live="polite"></div>
 
     <section class="screen screen-main" id="mainScreen" aria-label="Pantalla principal">
-<header class="topbar">
-  <div class="brand-showcase">
-    <h1 class="brand-name">CAPIDONA</h1>
+      <header class="topbar">
+        <div class="brand-showcase">
+          <h1 class="brand-name">CAPIDONA</h1>
 
-    <div class="brand-row">
-      <div class="brand-logo">
-        <img src="Logo Capidona.png" alt="Logo de CAPIDONA" />
-      </div>
+          <div class="brand-row">
+            <div class="brand-logo">
+              <img src="Logo Capidona.png" alt="Logo de CAPIDONA" />
+            </div>
+            <div class="slogan-pill">un capricho dulce y gordito</div>
+          </div>
 
-      <div class="slogan-pill">un capricho dulce y gordito</div>
-    </div>
+          <nav class="section-tabs" aria-label="Secciones de CAPIDONA">
+            <button class="section-tab active" type="button" data-page-tab="products">Productos</button>
+            <button class="section-tab" type="button" data-page-tab="about">Quiénes somos</button>
+            <button class="section-tab" type="button" data-page-tab="contact">Contacto</button>
+          </nav>
 
-    <p class="brand-guide">Elige tu producto y solicita tu pedido ágilmente.</p>
-  </div>
-</header>
+          <p class="brand-guide">Elige tu producto y solicita tu pedido ágilmente.</p>
+        </div>
+      </header>
+
       <div class="main-body">
         <div class="catalog-rail" id="catalog"></div>
       </div>
@@ -1331,6 +1546,20 @@
           </div>
         </div>
       </div>
+    </section>
+
+    <section class="screen info-screen" id="aboutScreen" aria-label="Quiénes somos">
+      <div class="info-top">
+        <button class="info-back-btn" type="button" data-page-back>← Volver a productos</button>
+      </div>
+      <div class="info-content" id="aboutContent"></div>
+    </section>
+
+    <section class="screen info-screen" id="contactScreen" aria-label="Contacto">
+      <div class="info-top">
+        <button class="info-back-btn" type="button" data-page-back>← Volver a productos</button>
+      </div>
+      <div class="info-content" id="contactContent"></div>
     </section>
 
     <section class="screen screen-checkout" id="checkoutScreen" aria-label="Flujo de checkout">
@@ -1496,8 +1725,8 @@
 
       integrations: {
         sheetsEnabled: true,
-        configEndpoint: "https://script.google.com/macros/s/AKfycbwPil0VZ4ymizWJ6lsoUitn0UVeT-Du-yXTrnTLcwE9OeFSzZQULHlmRdSZRdCyVcGVRA/exec", // Pegar aquí el endpoint GET de Apps Script para configuración.
-        ordersEndpoint: "https://script.google.com/macros/s/AKfycbwPil0VZ4ymizWJ6lsoUitn0UVeT-Du-yXTrnTLcwE9OeFSzZQULHlmRdSZRdCyVcGVRA/exec", // Pegar aquí el endpoint POST de Apps Script para pedidos.
+        configEndpoint: "https://script.google.com/macros/s/AKfycbyDZ4RhAq3_mjXAPu-zsGAvP845UDKfepZ7lBVW1cZ9LxCKtB9KdYS4oJPbOUeo_mRz/exec", // Pegar aquí el endpoint GET de Apps Script para configuración.
+        ordersEndpoint: "https://script.google.com/macros/s/AKfycbyDZ4RhAq3_mjXAPu-zsGAvP845UDKfepZ7lBVW1cZ9LxCKtB9KdYS4oJPbOUeo_mRz/exec", // Pegar aquí el endpoint POST de Apps Script para pedidos.
         mode: "production"
       },
 
@@ -1653,7 +1882,19 @@
           shortName: "Otra delicia",
           order: 4
         }
-      ]
+      ],
+
+      pageContent: {
+        aboutTitle: "Quiénes somos",
+        aboutText: "CAPIDONA es una repostería artesanal digital en Manta. Creamos pedidos dulces bajo pedido con una experiencia sencilla, cuidada y amigable.",
+        aboutImage: "",
+        contactTitle: "Contacto",
+        contactText: "Escríbenos por WhatsApp para coordinar tu pedido, entrega o retiro.",
+        contactWhatsapp: "593985711629",
+        contactInstagram: "",
+        contactAddress: "Manta, Ecuador",
+        contactHours: "Pedidos según disponibilidad de fechas y franjas en la web."
+      }
     };
 
     /* =========================================================
@@ -1721,7 +1962,11 @@
       checkoutSummary: $("#checkoutSummary"),
       finalProductSummary: $("#finalProductSummary"),
       dateStepSummary: $("#dateStepSummary"),
-      orderNotes: $("#orderNotes")
+      orderNotes: $("#orderNotes"),
+      aboutScreen: $("#aboutScreen"),
+      contactScreen: $("#contactScreen"),
+      aboutContent: $("#aboutContent"),
+      contactContent: $("#contactContent")
     };
 
     /* =========================================================
@@ -1879,6 +2124,34 @@ async function loadRemoteConfig() {
   }
 }
 
+    function normalizePageContentRows(rows) {
+      if (!Array.isArray(rows)) return {};
+
+      return rows.reduce((acc, item) => {
+        if (!item || item.active === false || String(item.activo).toUpperCase() === "FALSE") return acc;
+
+        const key = String(item.clave || item.key || "").trim();
+        const value = String(item.valor ?? item.value ?? "").trim();
+
+        if (!key) return acc;
+
+        const map = {
+          sobre_titulo: "aboutTitle",
+          sobre_texto: "aboutText",
+          sobre_imagen: "aboutImage",
+          contacto_titulo: "contactTitle",
+          contacto_texto: "contactText",
+          contacto_whatsapp: "contactWhatsapp",
+          contacto_instagram: "contactInstagram",
+          contacto_direccion: "contactAddress",
+          contacto_horarios: "contactHours"
+        };
+
+        if (map[key]) acc[map[key]] = value;
+        return acc;
+      }, {});
+    }
+
     function normalizeRemoteConfig(remote) {
       if (!remote || typeof remote !== "object") return;
       if (remote.business) Object.assign(CONFIG.business, remote.business);
@@ -1889,6 +2162,11 @@ async function loadRemoteConfig() {
       if (Array.isArray(remote.blockedDates)) CONFIG.blockedDates = remote.blockedDates;
       if (Array.isArray(remote.paymentMethods)) CONFIG.paymentMethods = remote.paymentMethods;
       if (Array.isArray(remote.banks)) CONFIG.banks = remote.banks;
+      if (remote.pageContent) Object.assign(CONFIG.pageContent, remote.pageContent);
+      if (remote.pages) Object.assign(CONFIG.pageContent, remote.pages);
+      if (Array.isArray(remote.ConfiguracionPagina)) Object.assign(CONFIG.pageContent, normalizePageContentRows(remote.ConfiguracionPagina));
+      if (Array.isArray(remote.configuracionPagina)) Object.assign(CONFIG.pageContent, normalizePageContentRows(remote.configuracionPagina));
+      if (Array.isArray(remote.pageConfig)) Object.assign(CONFIG.pageContent, normalizePageContentRows(remote.pageConfig));
     }
 
     async function submitOrderToSheets(orderPayload) {
@@ -2474,6 +2752,66 @@ async function loadRemoteConfig() {
       });
     }
 
+    function renderPageContent() {
+      const page = CONFIG.pageContent || {};
+      const aboutImage = page.aboutImage ? `
+        <div class="info-image">${imageHtml(page.aboutImage, page.aboutTitle || "Quiénes somos")}</div>
+      ` : "";
+
+      el.aboutContent.innerHTML = `
+        <h2>${page.aboutTitle || "Quiénes somos"}</h2>
+        ${aboutImage}
+        <p>${page.aboutText || "Información de CAPIDONA pendiente de configurar."}</p>
+      `;
+
+      const contactItems = [
+        ["WhatsApp", page.contactWhatsapp || CONFIG.contact.whatsappNumber || ""],
+        ["Instagram", page.contactInstagram || ""],
+        ["Zona de atención", page.contactAddress || CONFIG.business.city || ""],
+        ["Horarios", page.contactHours || ""]
+      ].filter(([, value]) => value);
+
+      el.contactContent.innerHTML = `
+        <h2>${page.contactTitle || "Contacto"}</h2>
+        <p>${page.contactText || "Información de contacto pendiente de configurar."}</p>
+        <div class="contact-list">
+          ${contactItems.map(([label, value]) => `
+            <div class="contact-item">
+              <strong>${label}</strong>
+              <span>${value}</span>
+            </div>
+          `).join("")}
+        </div>
+      `;
+    }
+
+    function setActivePageTab(pageName = "products") {
+      $$("[data-page-tab]").forEach(btn => {
+        btn.classList.toggle("active", btn.dataset.pageTab === pageName);
+      });
+    }
+
+    function showProductsPage() {
+      state.view = "main";
+      el.aboutScreen.classList.remove("active");
+      el.contactScreen.classList.remove("active");
+      el.checkoutScreen.classList.remove("active");
+      el.thanksScreen.classList.remove("active");
+      setActivePageTab("products");
+      closeSheets();
+    }
+
+    function showInfoPage(pageName) {
+      state.view = pageName;
+      renderPageContent();
+      el.aboutScreen.classList.toggle("active", pageName === "about");
+      el.contactScreen.classList.toggle("active", pageName === "contact");
+      el.checkoutScreen.classList.remove("active");
+      el.thanksScreen.classList.remove("active");
+      setActivePageTab(pageName);
+      closeSheets();
+    }
+
     function renderAll() {
       renderCatalog();
       renderCartBar();
@@ -2487,6 +2825,7 @@ async function loadRemoteConfig() {
       renderBanks();
       renderCheckoutSummary();
       renderFinalProductSummary();
+      renderPageContent();
       renderSteps();
       updateButtonsState();
     }
@@ -2566,10 +2905,7 @@ async function loadRemoteConfig() {
     }
 
     function showMain() {
-      state.view = "main";
-      el.checkoutScreen.classList.remove("active");
-      el.thanksScreen.classList.remove("active");
-      closeSheets();
+      showProductsPage();
     }
 
     function showThanks() {
@@ -2742,6 +3078,20 @@ async function loadRemoteConfig() {
     /* =========================================================
        11. EVENTOS
        ========================================================= */
+    $$("[data-page-tab]").forEach(btn => {
+      btn.addEventListener("click", () => {
+        if (btn.dataset.pageTab === "products") {
+          showProductsPage();
+          return;
+        }
+        showInfoPage(btn.dataset.pageTab);
+      });
+    });
+
+    $$("[data-page-back]").forEach(btn => {
+      btn.addEventListener("click", showProductsPage);
+    });
+
     $("#openCartBtn").addEventListener("click", () => {
       renderCartSheet();
       openSheet("cart");
