@@ -1514,7 +1514,7 @@
 
           <div class="brand-row">
             <div class="brand-logo">
-              <img src="Logo Capidona.png" alt="Logo de CAPIDONA" />
+              <img class="brand-logo-img" src="assets/images/Logo Capidona.png" alt="Logo de CAPIDONA" />
             </div>
             <div class="slogan-pill">un capricho dulce y gordito</div>
           </div>
@@ -1566,7 +1566,7 @@
       <header class="checkout-top">
         <button class="top-action" id="backBtn" type="button">Retroceder</button>
         <div class="checkout-brand" aria-label="CAPIDONA">
-          <img src="Logo Capidona.png" alt="Logo de CAPIDONA" />
+          <img class="brand-logo-img" src="assets/images/Logo Capidona.png" alt="Logo de CAPIDONA" />
           <strong>CAPIDONA</strong>
         </div>
         <button class="top-action" id="cancelBtn" type="button">Cancelar</button>
@@ -1677,7 +1677,7 @@
 
     <section class="screen screen-thanks" id="thanksScreen" aria-label="Pedido confirmado">
       <div class="thanks-card">
-        <img src="Logo Capidona.png" alt="Logo de CAPIDONA" />
+        <img class="brand-logo-img" src="assets/images/Logo Capidona.png" alt="Logo de CAPIDONA" />
         <h2>Gracias por tu pedido</h2>
         <p>Te llevaremos a WhatsApp para finalizar la confirmación con CAPIDONA.</p>
       </div>
@@ -2172,6 +2172,8 @@ async function loadRemoteConfig() {
       if (!remote || typeof remote !== "object") return;
       if (remote.business) Object.assign(CONFIG.business, remote.business);
       if (remote.contact) Object.assign(CONFIG.contact, remote.contact);
+      if (remote.pageContent) Object.assign(CONFIG.pageContent, remote.pageContent);
+      if (remote.configuracionPagina) Object.assign(CONFIG.pageContent, remote.configuracionPagina);
       if (Array.isArray(remote.products)) CONFIG.products = remote.products;
       if (Array.isArray(remote.catalog)) CONFIG.products = remote.catalog;
       if (Array.isArray(remote.scheduleRules)) CONFIG.scheduleRules = remote.scheduleRules;
@@ -2380,6 +2382,15 @@ async function loadRemoteConfig() {
     /* =========================================================
        8. RENDERIZADO
        ========================================================= */
+    
+    function renderBrandAssets() {
+  const logoPath = CONFIG.pageContent?.logoImagen || "assets/images/Logo Capidona.png";
+
+  document.querySelectorAll(".brand-logo-img").forEach(img => {
+    img.src = resolveImagePath(logoPath);
+  });
+}
+    
     function renderCatalog() {
       el.catalog.innerHTML = getSortedProducts().map(product => {
         if (product.purchasable && product.status === "active") {
@@ -2829,6 +2840,7 @@ async function loadRemoteConfig() {
     }
 
     function renderAll() {
+      renderBrandAssets();
       renderCatalog();
       renderCartBar();
       renderCartSheet();
