@@ -2638,16 +2638,18 @@ function formatCartProductNames(lines) {
         ${product.purchasable ? `<p class="detail-price-text">${money(product.price)}</p>` : `<p class="detail-price-text">Coming Soon</p>`}
       `;
     }
-
-    function renderCartBar() {
+    
+function renderCartBar() {
   const qty = getCartQuantity();
   const total = getCartTotal();
-  const lines = getCartLines();
 
-  el.cartMain.textContent = `${pluralizeProducts(qty)} · ${money(total)}`;
-  el.cartSub.textContent = qty > 0
-    ? formatCartProductNames(lines)
-    : "Añade productos para continuar";
+  if (qty > 0) {
+    el.cartMain.textContent = `${pluralizeProducts(qty)} · ${money(total)} + envío`;
+    el.cartSub.textContent = "";
+  } else {
+    el.cartMain.textContent = `${pluralizeProducts(0)} · ${money(0)} + envío`;
+    el.cartSub.textContent = "Añade productos para continuar";
+  }
 
   el.checkoutBtn.disabled = qty <= 0;
   el.checkoutBtn.classList.toggle("ready", qty > 0);
