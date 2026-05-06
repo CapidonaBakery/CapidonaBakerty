@@ -2394,9 +2394,29 @@ async function loadRemoteConfig() {
       }).filter(line => line.quantity > 0 && line.product);
     }
 
-    function pluralizeBoxes(qty) {
-      return `${qty} ${qty === 1 ? "caja" : "cajas"}`;
-    }
+    function pluralizeProducts(qty) {
+  return `${qty} ${qty === 1 ? "producto" : "productos"}`;
+}
+
+function pluralizeUnits(qty) {
+  return `${qty} ${qty === 1 ? "unidad" : "unidades"}`;
+}
+
+function formatCartProductNames(lines) {
+  if (!lines.length) return "Añade productos para continuar";
+
+  const names = lines.map(line => line.product.shortName || line.product.name);
+
+  if (names.length === 1) {
+    return `${names[0]} + envío`;
+  }
+
+  if (names.length === 2) {
+    return `${names[0]} y ${names[1]} + envío`;
+  }
+
+  return `${names.slice(0, 2).join(", ")} y ${names.length - 2} más + envío`;
+}
 
     function updateCart(productId, delta) {
       const product = getProduct(productId);
@@ -2620,14 +2640,19 @@ async function loadRemoteConfig() {
     }
 
     function renderCartBar() {
-      const qty = getCartQuantity();
-      const total = getCartTotal();
-      el.cartMain.textContent = `${pluralizeBoxes(qty)} · ${money(total)}`;
-      el.cartSub.textContent = qty > 0 ? `Galletas rellenas + envío` : "Añade tus galletas para continuar";
-      el.checkoutBtn.disabled = qty <= 0;
-      el.checkoutBtn.classList.toggle("ready", qty > 0);
-      el.openCartBtn.disabled = qty <= 0;
-    }
+  const qty = getCartQuantity();
+  const total = getCartTotal();
+  const lines = getCartLines();
+
+  el.cartMain.textContent = `${pluralizeProducts(qty)} · ${money(total)}`;
+  el.cartSub.textContent = qty > 0
+    ? formatCartProductNames(lines)
+    : "Añade productos para continuar";
+
+  el.checkoutBtn.disabled = qty <= 0;
+  el.checkoutBtn.classList.toggle("ready", qty > 0);
+  el.openCartBtn.disabled = qty <= 0;
+}
 
     function renderCartSheet() {
       const lines = getCartLines();
@@ -2635,7 +2660,7 @@ async function loadRemoteConfig() {
         el.cartSheetBody.innerHTML = `
           <div class="helper-card">
             <strong>Tu carrito está vacío</strong>
-            <p>Cuando añadas tus galletas, aquí podrás revisarlas rápido.</p>
+            <p>Cuando añadas productos, aquí podrás revisarlos rápido.</p>
           </div>
         `;
         return;
@@ -2645,7 +2670,7 @@ async function loadRemoteConfig() {
         <div class="cart-line">
           <div>
             <strong>${line.product.shortName}</strong>
-            <span>${pluralizeBoxes(line.quantity)} · ${money(line.subtotal)} + envío</span>
+            <span>${pluralizeUnits(line.quantity)} · ${money(line.subtotal)} + envío</span>
           </div>
           <div class="line-actions">
             <button class="mini-btn" data-sheet-action="minus" data-product-id="${line.product.id}" type="button" aria-label="Quitar">−</button>
@@ -2674,8 +2699,8 @@ async function loadRemoteConfig() {
     function renderDateOptions() {
       const dates = getAvailableDates();
       el.blockedDatesHelp.textContent = CONFIG.messages.blockedDatesHelp;
-      el.dateStepSummary.textContent = `${pluralizeBoxes(getCartQuantity())} de galletas rellenas`;
-
+      el.dateStepSummary.textContent = `${pluralizeProducts(getCartQuantity())} seleccionados · ${money(getCartTotal())}`;
+      
       if (!dates.length) {
         el.dateOptions.innerHTML = `
           <div class="helper-card">
@@ -2884,7 +2909,9 @@ async function loadRemoteConfig() {
         </div>
       ` : "";
 
-      const productLine = getCartLines().map(line => `${line.product.shortName} (${pluralizeBoxes(line.quantity)})`).join(", ") || "Pendiente";
+      const productLine = getCartLines()
+  .map(line => `${line.product.shortName} (${pluralizeUnits(line.quantity)})`)
+  .join(", ") || "Pendiente";
 
       el.checkoutSummary.innerHTML = `
         <div class="summary-row">
